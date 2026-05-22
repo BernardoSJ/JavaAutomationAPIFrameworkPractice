@@ -10,7 +10,7 @@ import org.testng.annotations.Test;
 import static io.restassured.RestAssured.given;
 
 
-public class LoginAPITest3 {
+public class LoginTest {
 
     @Test(description = "Verify if Login API is working...")
     public void loginTest(){
