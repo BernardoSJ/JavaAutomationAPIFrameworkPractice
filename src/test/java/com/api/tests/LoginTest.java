@@ -5,11 +5,11 @@ import com.api.models.request.LoginRequest;
 import com.api.models.response.LoginResponse;
 import io.restassured.response.Response;
 import org.testng.Assert;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
-import static io.restassured.RestAssured.given;
 
-
+@Listeners(com.api.listeners.TestListener.class)
 public class LoginTest {
 
     @Test(description = "Verify if Login API is working...")
