@@ -9,30 +9,36 @@ import io.restassured.specification.RequestSpecification;
 public class BaseService {
 
     private static final String BASE_URL = "http://64.227.160.186:8080";
-    private RequestSpecification requestSpecification;
+
+    private static final ThreadLocal<RequestSpecification> requestSpecification = new ThreadLocal<>();
+
 
     static {
         RestAssured.filters(new LoggingFilter());
     }
 
     public BaseService(){
-        requestSpecification = RestAssured.given().baseUri(BASE_URL);
+        requestSpecification.set(RestAssured.given().baseUri(BASE_URL));
     }
 
     protected Response postRequest(Object payload, String endpoint){
-        return requestSpecification.contentType(ContentType.JSON).body(payload).post(endpoint);
+        return requestSpecification.get().contentType(ContentType.JSON).body(payload).post(endpoint);
     }
 
     protected Response getRequest(String endpoint){
-        return requestSpecification.contentType(ContentType.JSON).get(endpoint);
+        return requestSpecification.get().contentType(ContentType.JSON).get(endpoint);
     }
 
     protected Response putRequest(Object payload, String endpoint){
-        return requestSpecification.contentType(ContentType.JSON).body(payload).put(endpoint);
+        return requestSpecification.get().contentType(ContentType.JSON).body(payload).put(endpoint);
     }
 
     protected void setAuthToken(String token){
-        requestSpecification.header("Authorization", "Bearer "+token);
+        requestSpecification.get().header("Authorization", "Bearer "+token);
+    }
+
+    public RequestSpecification getRequest() {
+        return requestSpecification.get();
     }
 
 }
